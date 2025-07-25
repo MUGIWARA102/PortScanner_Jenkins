@@ -6,27 +6,36 @@ pipeline {
     }
 
     stages {
-        stage('Clone Repo') {
+        stage('Checkout') {
             steps {
-                git branch: 'main' 'https://github.com/MUGIWARA102/PortScanner.git'
+                checkout scm
             }
         }
-
-        stage('Install Dependencies') {
+        stage('Install dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
-
+        stage('Lint') {
+            steps {
+                sh '''
+                    . venv/bin/activate
+                    pip install flake8
+                    flake8 main.py
+                '''
+            }
+        }
         stage('Run Scan') {
             steps {
-                sh "python main.py ${params.TARGET_IP} > scan_output.txt"
-            }
-        }
-
-        stage('Archive Results') {
-            steps {
-                archiveArtifacts artifacts: 'scan_output.txt', fingerprint: true
+                sh '''
+                    . venv/bin/activate
+                    python main.py 127.0.0.1
+                '''
             }
         }
     }
