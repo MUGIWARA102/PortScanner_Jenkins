@@ -14,6 +14,6 @@ This is a simple network portscanner built with Python and designed for CI/CD au
 Clone the project and install dependencies:
 
 ```bash
-git clone https://github.com/MUGIWARA102/portscanner-project.git
-cd portscanner-project
+git clone https://github.com/MUGIWARA102/portscanner_Jenkins.git
+cd portscanner-Jenkins
 pip install -r requirements.txt
